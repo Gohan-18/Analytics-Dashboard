@@ -17,7 +17,7 @@ const Layout = () => {
         <Container maxWidth="lg">
           <Header />
           <Settings />
-          {/* <DataTable /> */}
+          <DataTable />
         </Container>
       </ThemeProvider>
     </>

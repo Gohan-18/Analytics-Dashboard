@@ -1,11 +1,48 @@
 import { Box, Button, Input, TextField, Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import TuneIcon from "@mui/icons-material/Tune";
 import { useTheme } from "@emotion/react";
 import { metrics } from "../utils/constants";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { Calendar, DateRangePicker, DateRange } from "react-date-range";
+import format from "date-fns/format";
+import { addDays } from "date-fns";
 
 const Settings = () => {
   const theme = useTheme();
+  const [viewDimension, setViewDimension] = useState(false);
+  const [viewCal, setViewCal] = useState(false);
+  const [selectionRange, setSelectionRange] = useState([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
+  const refOne = useRef(null);
+  //   const [date, setDate] = useState({
+  //     startDate: "2021-06-01",
+  //     endDate: "2021-06-30",
+  //   });
+
+  useEffect(() => {
+    document.addEventListener("click", hideOnClickOutside, true);
+  }, []);
+
+  const hideOnClickOutside = (e) => {
+    // console.log(refOne.current);
+    // console.log(e.target);
+
+    if (refOne.current && !refOne.current.contains(e.target)) {
+      setViewCal(false);
+    }
+  };
+
+  function handleSelect(date) {
+    // console.log(date); // native Date object
+    // console.log(format(date, "yyyy-MM-dd")); // native Date object
+  }
 
   return (
     <>
@@ -16,6 +53,7 @@ const Settings = () => {
           justifyContent: "center",
           flexDirection: "column",
           width: "100%",
+          pb: "20px",
         }}
       >
         <Box
@@ -27,8 +65,54 @@ const Settings = () => {
             py: "10px",
           }}
         >
-          <TextField size="small" type="date" />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+            }}
+          >
+            <TextField
+              onClick={() => setViewCal(!viewCal)}
+              size="small"
+              // inputProps={{readonly: true}}
+              type="text"
+              value={`${format(
+                selectionRange[0].startDate,
+                "dd/MMM/yyyy"
+              )} - ${format(selectionRange[0].endDate, "dd/MMM/yyyy")}`}
+              sx={{
+                "& .MuiInputBase-input": {
+                  fontSize: "16px",
+                  width: "200px",
+                },
+              }}
+            />
+            <Box
+              ref={refOne}
+              sx={{
+                position: "absolute",
+                top: "50px",
+                zIndex: 999,
+                display: viewCal ? "flex" : "none",
+                // width: '200px'
+              }}
+            >
+              <DateRange
+                ranges={selectionRange}
+                onChange={(item) => setSelectionRange([item.selection])}
+                editableDateInputs={true}
+                moveRangeOnFirstSelection={false}
+                months={1}
+                direction="horizontal"
+                className="dateRange"
+              />
+            </Box>
+          </Box>
+          {/* <Calendar date={new Date()} onChange={handleSelect} /> */}
           <Button
+            onClick={() => setViewDimension(true)}
             size="small"
             sx={{ color: "#343a40", border: "2px solid #ced4da", px: "10px" }}
             startIcon={<TuneIcon sx={{ fill: theme.palette.primary.main }} />}
@@ -38,7 +122,7 @@ const Settings = () => {
         </Box>
         <Box
           sx={{
-            display: "flex",
+            display: viewDimension ? "flex" : "none",
             alignItems: "start",
             justifyContent: "center",
             flexDirection: "column",
@@ -90,6 +174,7 @@ const Settings = () => {
             }}
           >
             <Button
+            onClick={() => setViewDimension(false)}
               size="small"
               sx={{ border: "2px solid #ced4da", px: "10px", fontSize: "14px" }}
             >
