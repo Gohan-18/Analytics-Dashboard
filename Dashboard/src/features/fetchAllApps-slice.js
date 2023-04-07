@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 export const fetchApps = createAsyncThunk('fetch/apps', async () => {
     try {
-        const data = await fetch(`http://go-dev.greedygame.com/v3/dummy/apps`)
+        const data = await fetch(`https://go-dev.greedygame.com/v3/dummy/apps`)
         const result = await data.json();
         // console.log(result)
         return result;
