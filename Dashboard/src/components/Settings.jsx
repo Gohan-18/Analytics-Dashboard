@@ -10,10 +10,12 @@ import format from "date-fns/format";
 import { addDays } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMetricesView } from "../features/metricesViewState-slice";
+import { fetchReports } from "../features/fetchAllReport-slice";
 
 const Settings = () => {
   const theme = useTheme();
   const dispatch = useDispatch();
+  const reports = useSelector((state) => state?.reportList?.reportList);
   const [viewDimension, setViewDimension] = useState(false);
   const [viewCal, setViewCal] = useState(false);
   const [selectionRange, setSelectionRange] = useState([
@@ -27,6 +29,13 @@ const Settings = () => {
   const currentState = useSelector((state) => state?.metricsState.metricsState);
     // console.log(currentState)
 
+    useEffect(() => {
+        let srtDate = format(selectionRange[0].startDate,"yyyy-MM-dd")
+        let endDate = format(selectionRange[0].endDate,"yyyy-MM-dd")
+        dispatch(fetchReports({srtDate, endDate}));
+    }, [selectionRange])
+    
+
   useEffect(() => {
     document.addEventListener("click", hideOnClickOutside, true);
   }, []);
@@ -36,6 +45,10 @@ const Settings = () => {
       setViewCal(false);
     }
   };
+
+  if(!reports.length) {
+    // dispatch(fetchReports());
+  }
 
   const handleMetricesState = (item) => {
     console.log(item)
@@ -99,7 +112,7 @@ const Settings = () => {
             >
               <DateRange
                 ranges={selectionRange}
-                onChange={(item) => setSelectionRange([item.selection])}
+                onChange={(item) => {setSelectionRange([item.selection])}}
                 editableDateInputs={true}
                 moveRangeOnFirstSelection={false}
                 months={1}
@@ -146,7 +159,6 @@ const Settings = () => {
             }}
           >
             {currentState.map((item, index) => {
-                // console.log(currentState)
             return(
               <Button
                 onClick={() => handleMetricesState(currentState.indexOf(item))}
@@ -182,27 +194,8 @@ const Settings = () => {
             >
               Close
             </Button>
-            {/* <Button size="small" variant="contained">
-              Apply changes
-            </Button> */}
           </Box>
         </Box>
-        {/* <Box
-          sx={{
-            width: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "end",
-            flexWrap: "wrap",
-            gap: 3,
-            py: "10px",
-          }}
-        >
-          <Button size="small" sx={{ border: "2px solid #ced4da", px: "10px", fontSize: '14px' }}>
-            Close
-          </Button>
-          <Button size="small" variant="contained">Apply changes</Button>
-        </Box> */}
       </Box>
     </>
   );

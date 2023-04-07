@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-export const fetchReports = createAsyncThunk('fetch/report', async () => {
+export const fetchReports = createAsyncThunk('fetch/report', async ({srtDate, endDate}) => {
+    console.log(srtDate)
     try {
-        const data = await fetch(`http://go-dev.greedygame.com/v3/dummy/report?startDate=2021-06-01&endDate=2021-06-30`)
+        const data = await fetch(`http://go-dev.greedygame.com/v3/dummy/report?startDate=${srtDate}&endDate=${endDate}`)
         const result = await data.json();
         // console.log(result)
         return result;

@@ -14,7 +14,7 @@ const Layout = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Container maxWidth="lg">
+        <Container maxWidth="lg" sx={{mb: '50px'}}>
           <Header />
           <Settings />
           <DataTable />
