@@ -36,7 +36,6 @@ const DataTable = () => {
 
 
   useEffect(() => {
-    // dispatch(fetchReports());
     dispatch(fetchApps());
   }, []);
 
@@ -120,30 +119,15 @@ const DataTable = () => {
                       }}
                       key={item.name}
                     >
-                      {/* <IconButton sx={{alignContent: 'center', width: '100%', borderRadius: '10px'}} >
-                        <FilterAltIcon />
-                    </IconButton> */}
                       <Typography sx={{ fontSize: "14px", width: "100%" }}>
                         {item.name}
                       </Typography>
-                    {/* <IconButton sx={{alignContent: 'center', width: '100%', borderRadius: '10px'}} onClick={() => setSortIcon(!sortIcon)} >
-                        {sortIcon ? <ArrowUpwardIcon/> : <ArrowDownwardIcon/> } 
-                    </IconButton> */}
-                      {/* <TextField  sx={{position: 'absolute', zIndex: 9999}} type="text" /> */}
                     </TableCell>
                   ))}
                 </TableRow>
               </TableHead>
-              {/* {!reports.length ? (
-              <Box>
-                <Typography>Loading...</Typography>
-              </Box>
-            ) : ( */}
               <TableBody>
                 {filteredByName?.map((item, index) => {
-                  //   const appName = data.filter(
-                  //     ({ app_id, app_name }) => app_id === item.app_id
-                  //   );
 
                   return (
                     <TableRow key={index} className="table">
@@ -222,7 +206,6 @@ const DataTable = () => {
                   );
                 })}
               </TableBody>
-              {/* )} */}
             </Table>
           </Paper>
         </Box>

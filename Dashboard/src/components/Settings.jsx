@@ -27,14 +27,13 @@ const Settings = () => {
   ]);
   const refOne = useRef(null);
   const currentState = useSelector((state) => state?.metricsState.metricsState);
-    // console.log(currentState)
+  // console.log(currentState)
 
-    useEffect(() => {
-        let srtDate = format(selectionRange[0].startDate,"yyyy-MM-dd")
-        let endDate = format(selectionRange[0].endDate,"yyyy-MM-dd")
-        dispatch(fetchReports({srtDate, endDate}));
-    }, [selectionRange])
-    
+  useEffect(() => {
+    let srtDate = format(selectionRange[0].startDate, "yyyy-MM-dd");
+    let endDate = format(selectionRange[0].endDate, "yyyy-MM-dd");
+    dispatch(fetchReports({ srtDate, endDate }));
+  }, [selectionRange]);
 
   useEffect(() => {
     document.addEventListener("click", hideOnClickOutside, true);
@@ -46,14 +45,14 @@ const Settings = () => {
     }
   };
 
-  if(!reports.length) {
+  if (!reports.length) {
     // dispatch(fetchReports());
   }
 
   const handleMetricesState = (item) => {
-    console.log(item)
-    dispatch(toggleMetricesView(item))
-  }
+    console.log(item);
+    dispatch(toggleMetricesView(item));
+  };
 
   return (
     <>
@@ -107,12 +106,13 @@ const Settings = () => {
                 top: "50px",
                 zIndex: 999,
                 display: viewCal ? "flex" : "none",
-                // width: '200px'
               }}
             >
               <DateRange
                 ranges={selectionRange}
-                onChange={(item) => {setSelectionRange([item.selection])}}
+                onChange={(item) => {
+                  setSelectionRange([item.selection]);
+                }}
                 editableDateInputs={true}
                 moveRangeOnFirstSelection={false}
                 months={1}
@@ -121,7 +121,6 @@ const Settings = () => {
               />
             </Box>
           </Box>
-          {/* <Calendar date={new Date()} onChange={handleSelect} /> */}
           <Button
             onClick={() => setViewDimension(true)}
             size="small"
@@ -159,22 +158,25 @@ const Settings = () => {
             }}
           >
             {currentState.map((item, index) => {
-            return(
-              <Button
-                onClick={() => handleMetricesState(currentState.indexOf(item))}
-                size="small"
-                sx={{
-                  color: "#343a40",
-                  border: "2px solid",
-                  px: "10px",
-                  fontSize: "14px",
-                  borderColor: item.state ? "#0466c8" : "#ced4da",
-                }}
-                key={index}
-              >
-                {item.name}
-              </Button>
-            )})}
+              return (
+                <Button
+                  onClick={() =>
+                    handleMetricesState(currentState.indexOf(item))
+                  }
+                  size="small"
+                  sx={{
+                    color: "#343a40",
+                    border: "2px solid",
+                    px: "10px",
+                    fontSize: "14px",
+                    borderColor: item.state ? "#0466c8" : "#ced4da",
+                  }}
+                  key={index}
+                >
+                  {item.name}
+                </Button>
+              );
+            })}
           </Box>
           <Box
             sx={{
