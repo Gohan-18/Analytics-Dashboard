@@ -1,16 +1,19 @@
-import { Box, Button, Input, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import TuneIcon from "@mui/icons-material/Tune";
 import { useTheme } from "@emotion/react";
 import { metrics } from "../utils/constants";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { Calendar, DateRangePicker, DateRange } from "react-date-range";
+import { DateRange } from "react-date-range";
 import format from "date-fns/format";
 import { addDays } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
+import { toggleMetricesView } from "../features/metricesViewState-slice";
 
 const Settings = () => {
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [viewDimension, setViewDimension] = useState(false);
   const [viewCal, setViewCal] = useState(false);
   const [selectionRange, setSelectionRange] = useState([
@@ -21,27 +24,22 @@ const Settings = () => {
     },
   ]);
   const refOne = useRef(null);
-  //   const [date, setDate] = useState({
-  //     startDate: "2021-06-01",
-  //     endDate: "2021-06-30",
-  //   });
+  const currentState = useSelector((state) => state?.metricsState.metricsState);
+    // console.log(currentState)
 
   useEffect(() => {
     document.addEventListener("click", hideOnClickOutside, true);
   }, []);
 
   const hideOnClickOutside = (e) => {
-    // console.log(refOne.current);
-    // console.log(e.target);
-
     if (refOne.current && !refOne.current.contains(e.target)) {
       setViewCal(false);
     }
   };
 
-  function handleSelect(date) {
-    // console.log(date); // native Date object
-    // console.log(format(date, "yyyy-MM-dd")); // native Date object
+  const handleMetricesState = (item) => {
+    console.log(item)
+    dispatch(toggleMetricesView(item))
   }
 
   return (
@@ -147,20 +145,24 @@ const Settings = () => {
               pt: "10px",
             }}
           >
-            {metrics.map((item) => (
+            {currentState.map((item, index) => {
+                // console.log(currentState)
+            return(
               <Button
+                onClick={() => handleMetricesState(currentState.indexOf(item))}
                 size="small"
                 sx={{
                   color: "#343a40",
-                  border: "2px solid #ced4da",
+                  border: "2px solid",
                   px: "10px",
                   fontSize: "14px",
+                  borderColor: item.state ? "#0466c8" : "#ced4da",
                 }}
-                key={item}
+                key={index}
               >
-                {item}
+                {item.name}
               </Button>
-            ))}
+            )})}
           </Box>
           <Box
             sx={{
@@ -174,15 +176,15 @@ const Settings = () => {
             }}
           >
             <Button
-            onClick={() => setViewDimension(false)}
+              onClick={() => setViewDimension(false)}
               size="small"
               sx={{ border: "2px solid #ced4da", px: "10px", fontSize: "14px" }}
             >
               Close
             </Button>
-            <Button size="small" variant="contained">
+            {/* <Button size="small" variant="contained">
               Apply changes
-            </Button>
+            </Button> */}
           </Box>
         </Box>
         {/* <Box
