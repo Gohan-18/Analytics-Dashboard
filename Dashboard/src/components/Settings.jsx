@@ -11,6 +11,7 @@ import { addDays } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleMetricesView } from "../features/metricesViewState-slice";
 import { fetchReports } from "../features/fetchAllReport-slice";
+import { fetchApps } from "../features/fetchAllApps-slice";
 
 const Settings = () => {
   const theme = useTheme();
@@ -33,6 +34,7 @@ const Settings = () => {
     let srtDate = format(selectionRange[0].startDate, "yyyy-MM-dd");
     let endDate = format(selectionRange[0].endDate, "yyyy-MM-dd");
     dispatch(fetchReports({ srtDate, endDate }));
+    dispatch(fetchApps());
   }, [selectionRange]);
 
   useEffect(() => {

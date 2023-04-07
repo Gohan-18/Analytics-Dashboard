@@ -34,11 +34,6 @@ const DataTable = () => {
     setSort(event.target.value);
   };
 
-
-  useEffect(() => {
-    dispatch(fetchApps());
-  }, []);
-
   if (reports?.length && data?.length) {
     mergedArray = reports.map((item1) => {
       const item2 = data.find((item2) => item2.app_id === item1.app_id);
